@@ -8,11 +8,10 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout Mesa
-      uses: actions/checkout@v4
-      with:
-        repository: mesa3d/mesa
-        path: mesa
+ 
+    - name: Clone Mesa from GitLab
+  run: |
+    git clone https://gitlab.freedesktop.org/mesa/mesa.git
 
     - name: Install dependencies
       run: |
