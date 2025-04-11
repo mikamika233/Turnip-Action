@@ -61,7 +61,6 @@ jobs:
           -Dvulkan-drivers=freedreno \
           -Dgallium-drivers= \
           -Dandroid-libbacktrace=disabled \
-          -Dandroid-libunwind=disabled \
           -Dprefix=/mesa-install
 
     - name: Build Mesa
