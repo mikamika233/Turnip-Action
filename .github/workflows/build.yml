@@ -20,7 +20,8 @@ jobs:
           bison flex libdrm-dev libexpat1-dev \
           libzstd-dev zlib1g-dev llvm clang \
           libwayland-dev wayland-protocols \
-          cmake pkg-config glslang-tools
+          cmake pkg-config glslang-tools \
+          libva-dev android-libcutils-dev
 
     - name: Download Android NDK r28
       run: |
