@@ -35,7 +35,7 @@ jobs:
         echo "cpp = 'aarch64-linux-android21-clang++'" >> cross-file.txt
         echo "ar = 'llvm-ar'"                      >> cross-file.txt
         echo "strip = 'llvm-strip'"                >> cross-file.txt
-        echo "pkgconfig = 'pkg-config'"            >> cross-file.txt
+        echo "pkg-config = 'pkg-config'"            >> cross-file.txt
         echo ""                                    >> cross-file.txt
         echo "[host_machine]"                      >> cross-file.txt
         echo "system = 'android'"                  >> cross-file.txt
@@ -48,17 +48,17 @@ jobs:
         echo "NDK=$HOME/ndk" >> $GITHUB_ENV
         echo "PATH=$HOME/ndk/toolchains/llvm/prebuilt/linux-x86_64/bin:$PATH" >> $GITHUB_ENV
 
-    - name: Configure Mesa with Meson
+    - name: Configure Meson
       working-directory: mesa
       run: |
         meson setup build-android \
           --cross-file ../cross-file.txt \
           -Dplatforms=android \
-          -Dllvm=true \
-          -Dshared-llvm=true \
+          -Dllvm=enabled \
+          -Dshared-llvm=enabled \
           -Dbuildtype=release \
           -Dvulkan-drivers=freedreno \
-          -Dgallium-drivers=swrast \
+          -Dgallium-drivers=llvmpipe \
           -Dprefix=/mesa-install
 
     - name: Build Mesa
