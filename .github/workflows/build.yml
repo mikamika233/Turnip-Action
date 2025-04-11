@@ -24,11 +24,11 @@ jobs:
           libwayland-dev wayland-protocols \
           cmake
 
-    - name: Download Android NDK
+    - name: Download Android NDK r28
       run: |
-        wget https://dl.google.com/android/repository/android-ndk-r25b-linux.zip
-        unzip android-ndk-r25b-linux.zip
-        mv android-ndk-r25b $HOME/ndk
+        wget https://dl.google.com/android/repository/android-ndk-r28-linux.zip
+        unzip android-ndk-r28-linux.zip
+        mv android-ndk-r28 $HOME/ndk
 
     - name: Prepare cross file
       run: |
@@ -47,7 +47,7 @@ cpu = 'aarch64'
 endian = 'little'
 EOF
 
-    - name: Set env for NDK
+    - name: Set environment variables for NDK
       run: |
         echo "NDK=$HOME/ndk" >> $GITHUB_ENV
         echo "$HOME/ndk/toolchains/llvm/prebuilt/linux-x86_64/bin" >> $GITHUB_PATH
