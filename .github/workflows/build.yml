@@ -21,7 +21,8 @@ jobs:
           libzstd-dev zlib1g-dev llvm clang \
           libwayland-dev wayland-protocols \
           cmake pkg-config glslang-tools \
-          libva-dev android-libcutils-dev
+          libva-dev android-libcutils-dev \
+          android-platform-tools
 
     - name: Download Android NDK r28
       run: |
