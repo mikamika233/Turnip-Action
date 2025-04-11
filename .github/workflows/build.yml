@@ -32,20 +32,18 @@ jobs:
 
     - name: Prepare cross file
       run: |
-        cat <<EOF > cross-file.txt
-[binaries]
-c = 'aarch64-linux-android21-clang'
-cpp = 'aarch64-linux-android21-clang++'
-ar = 'llvm-ar'
-strip = 'llvm-strip'
-pkgconfig = 'pkg-config'
-
-[host_machine]
-system = 'android'
-cpu_family = 'aarch64'
-cpu = 'aarch64'
-endian = 'little'
-EOF
+        echo "[binaries]"                          >  cross-file.txt
+        echo "c = 'aarch64-linux-android21-clang'" >> cross-file.txt
+        echo "cpp = 'aarch64-linux-android21-clang++'" >> cross-file.txt
+        echo "ar = 'llvm-ar'"                      >> cross-file.txt
+        echo "strip = 'llvm-strip'"                >> cross-file.txt
+        echo "pkgconfig = 'pkg-config'"            >> cross-file.txt
+        echo ""                                    >> cross-file.txt
+        echo "[host_machine]"                      >> cross-file.txt
+        echo "system = 'android'"                  >> cross-file.txt
+        echo "cpu_family = 'aarch64'"              >> cross-file.txt
+        echo "cpu = 'aarch64'"                     >> cross-file.txt
+        echo "endian = 'little'"                   >> cross-file.txt
 
     - name: Set environment variables for NDK
       run: |
