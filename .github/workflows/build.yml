@@ -1,0 +1,82 @@
+name: Build Mesa Turnip for Android
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout Mesa
+      uses: actions/checkout@v3
+      with:
+        repository: mesa3d/mesa
+        path: mesa
+
+    - name: Install dependencies
+      run: |
+        sudo apt update
+        sudo apt install -y \
+          python3-mako meson ninja-build \
+          bison flex libdrm-dev libexpat1-dev \
+          libzstd-dev zlib1g-dev llvm clang \
+          libwayland-dev wayland-protocols \
+          cmake
+
+    - name: Download Android NDK
+      run: |
+        wget https://dl.google.com/android/repository/android-ndk-r25b-linux.zip
+        unzip android-ndk-r25b-linux.zip
+        mv android-ndk-r25b $HOME/ndk
+
+    - name: Prepare cross file
+      run: |
+        cat <<EOF > cross-file.txt
+[binaries]
+c = 'aarch64-linux-android21-clang'
+cpp = 'aarch64-linux-android21-clang++'
+ar = 'llvm-ar'
+strip = 'llvm-strip'
+pkgconfig = 'pkg-config'
+
+[host_machine]
+system = 'android'
+cpu_family = 'aarch64'
+cpu = 'aarch64'
+endian = 'little'
+EOF
+
+    - name: Set env for NDK
+      run: |
+        echo "NDK=$HOME/ndk" >> $GITHUB_ENV
+        echo "$HOME/ndk/toolchains/llvm/prebuilt/linux-x86_64/bin" >> $GITHUB_PATH
+
+    - name: Configure Mesa with Meson
+      working-directory: mesa
+      run: |
+        meson setup build-android \
+          --cross-file ../cross-file.txt \
+          -Dplatforms=android \
+          -Dllvm=true \
+          -Dshared-llvm=true \
+          -Dbuildtype=release \
+          -Dvulkan-drivers=freedreno \
+          -Dgallium-drivers=swrast \
+          -Dprefix=/mesa-install
+
+    - name: Build Mesa
+      working-directory: mesa
+      run: |
+        ninja -C build-android
+
+    - name: Install Mesa
+      working-directory: mesa
+      run: |
+        ninja -C build-android install
+
+    - name: Upload artifacts
+      uses: actions/upload-artifact@v3
+      with:
+        name: mesa-android-turnip
+        path: mesa-install
