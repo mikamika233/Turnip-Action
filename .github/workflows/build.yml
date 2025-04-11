@@ -9,8 +9,8 @@ jobs:
 
     steps:
     - name: Clone Mesa from GitLab
-  run: |
-    git clone https://gitlab.freedesktop.org/mesa/mesa.git
+      run: |
+        git clone https://gitlab.freedesktop.org/mesa/mesa.git
     
     - name: Install dependencies
       run: |
