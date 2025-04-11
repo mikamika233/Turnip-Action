@@ -50,7 +50,7 @@ EOF
     - name: Set environment variables for NDK
       run: |
         echo "NDK=$HOME/ndk" >> $GITHUB_ENV
-        echo "$HOME/ndk/toolchains/llvm/prebuilt/linux-x86_64/bin" >> $GITHUB_PATH
+        echo "PATH=$HOME/ndk/toolchains/llvm/prebuilt/linux-x86_64/bin:$PATH" >> $GITHUB_ENV
 
     - name: Configure Mesa with Meson
       working-directory: mesa
@@ -75,8 +75,20 @@ EOF
       run: |
         ninja -C build-android install
 
+    - name: Package into ZIP
+      run: |
+        cd mesa-install
+        zip -r ../mesa-turnip-android.zip .
+
     - name: Upload artifacts
       uses: actions/upload-artifact@v3
       with:
-        name: mesa-android-turnip
-        path: mesa-install
+        name: mesa-turnip-android
+        path: mesa-turnip-android.zip
+
+    - name: Create Release and Upload ZIP
+      uses: softprops/action-gh-release@v1
+      with:
+        files: mesa-turnip-android.zip
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
