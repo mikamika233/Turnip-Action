@@ -34,10 +34,6 @@ jobs:
         echo "NDK=$HOME/ndk" >> $GITHUB_ENV
         echo "PATH=$HOME/ndk/toolchains/llvm/prebuilt/linux-x86_64/bin:$PATH" >> $GITHUB_ENV
 
-    - name: Clone AOSP system/core for headers
-      run: |
-        git clone https://android.googlesource.com/platform/system/core.git aosp-core
-
     - name: Download prebuilt libs
       run: |
         wget https://github.com/mikamika233/Turnip-Action/releases/download/v1.0/prebuilt-libs.zip
