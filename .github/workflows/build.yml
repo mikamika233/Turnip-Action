@@ -11,7 +11,7 @@ jobs:
     - name: Clone Mesa from GitLab
       run: |
         git clone https://gitlab.freedesktop.org/mesa/mesa.git
-    
+
     - name: Install dependencies
       run: |
         sudo apt update
@@ -21,14 +21,22 @@ jobs:
           libzstd-dev zlib1g-dev llvm clang \
           libwayland-dev wayland-protocols \
           cmake pkg-config glslang-tools \
-          libva-dev android-libcutils-dev \
-          android-platform-tools
+          libva-dev
 
     - name: Download Android NDK r28
       run: |
         wget https://dl.google.com/android/repository/android-ndk-r28-linux.zip
         unzip android-ndk-r28-linux.zip
         mv android-ndk-r28 $HOME/ndk
+
+    - name: Set environment variables for NDK
+      run: |
+        echo "NDK=$HOME/ndk" >> $GITHUB_ENV
+        echo "PATH=$HOME/ndk/toolchains/llvm/prebuilt/linux-x86_64/bin:$PATH" >> $GITHUB_ENV
+
+    - name: Clone AOSP system/core for headers
+      run: |
+        git clone https://android.googlesource.com/platform/system/core.git aosp-core
 
     - name: Prepare cross file
       run: |
@@ -44,11 +52,10 @@ jobs:
         echo "cpu_family = 'aarch64'"              >> cross-file.txt
         echo "cpu = 'aarch64'"                     >> cross-file.txt
         echo "endian = 'little'"                   >> cross-file.txt
-
-    - name: Set environment variables for NDK
-      run: |
-        echo "NDK=$HOME/ndk" >> $GITHUB_ENV
-        echo "PATH=$HOME/ndk/toolchains/llvm/prebuilt/linux-x86_64/bin:$PATH" >> $GITHUB_ENV
+        echo ""                                    >> cross-file.txt
+        echo "[properties]"                        >> cross-file.txt
+        echo "c_args = ['-I../aosp-core/libcutils/include', '-I../aosp-core/liblog/include']" >> cross-file.txt
+        echo "cpp_args = ['-I../aosp-core/libcutils/include', '-I../aosp-core/liblog/include']" >> cross-file.txt
 
     - name: Configure Meson
       working-directory: mesa
