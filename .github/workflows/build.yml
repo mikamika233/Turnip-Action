@@ -34,13 +34,6 @@ jobs:
         echo "NDK=$HOME/ndk" >> $GITHUB_ENV
         echo "PATH=$HOME/ndk/toolchains/llvm/prebuilt/linux-x86_64/bin:$PATH" >> $GITHUB_ENV
 
-    - name: Download prebuilt libs
-      run: |
-        wget https://github.com/mikamika233/Turnip-Action/releases/download/v1.0/prebuilt-libs.zip
-        unzip prebuilt-libs.zip -d prebuilt-libs
-        echo "LDFLAGS=-L$(pwd)/prebuilt-libs/libs" >> $GITHUB_ENV
-        echo "LD_LIBRARY_PATH=$(pwd)/prebuilt-libs/libs:$LD_LIBRARY_PATH" >> $GITHUB_ENV
-
     - name: Prepare cross file
       run: |
         echo "[binaries]"                          >  cross-file.txt
@@ -66,9 +59,11 @@ jobs:
           -Dshared-llvm=enabled \
           -Dbuildtype=release \
           -Dvulkan-drivers=freedreno \
-          -Dgallium-drivers=llvmpipe \
+          -Dfreedreno-kmds=adreno \
+          -Dgallium-drivers= \
+          -Dandroid-libbacktrace=disabled \
+          -Dandroid-libunwind=disabled \
           -Dprefix=/mesa-install
-          -Dc_link_args="-lcutils -llog"
 
     - name: Build Mesa
       working-directory: mesa
