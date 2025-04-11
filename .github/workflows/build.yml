@@ -9,7 +9,7 @@ jobs:
 
     steps:
     - name: Checkout Mesa
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
       with:
         repository: mesa3d/mesa
         path: mesa
@@ -79,7 +79,7 @@ jobs:
         zip -r ../mesa-turnip-android.zip .
 
     - name: Upload artifacts
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: mesa-turnip-android
         path: mesa-turnip-android.zip
