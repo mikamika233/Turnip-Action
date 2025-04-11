@@ -59,7 +59,6 @@ jobs:
           -Dshared-llvm=enabled \
           -Dbuildtype=release \
           -Dvulkan-drivers=freedreno \
-          -Dfreedreno-kmds=adreno \
           -Dgallium-drivers= \
           -Dandroid-libbacktrace=disabled \
           -Dandroid-libunwind=disabled \
